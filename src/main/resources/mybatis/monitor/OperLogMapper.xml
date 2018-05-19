@@ -2,7 +2,7 @@
 <!DOCTYPE mapper
 PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.ruoyi.project.monitor.operlog.dao.IOperLogDao">
+<mapper namespace="com.ruoyi.project.monitor.operlog.mapper.OperLogMapper">
 
 	<resultMap type="OperLog" id="OperLogResult">
 		<id     property="operId"         column="oper_id"       />
@@ -21,15 +21,15 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	</resultMap>
 
 	<insert id="insertOperlog" parameterType="OperLog">
-		insert into sys_oper_log(title, action, method, channel, login_name, dept_name, oper_url, oper_ip, oper_param, status, error_msg) 
-        values (#{title}, #{action}, #{method}, #{channel}, #{loginName}, #{deptName}, #{operUrl}, #{operIp}, #{operParam}, #{status}, #{errorMsg})
+		insert into sys_oper_log(title, action, method, channel, login_name, dept_name, oper_url, oper_ip, oper_param, status, error_msg, oper_time) 
+        values (#{title}, #{action}, #{method}, #{channel}, #{loginName}, #{deptName}, #{operUrl}, #{operIp}, #{operParam}, #{status}, #{errorMsg}, sysdate())
 	</insert>
 	
 	<select id="selectOperLogList" parameterType="OperLog" resultMap="OperLogResult">
 		select * from sys_oper_log
 		<where>
 			<if test="searchValue != null and searchValue != ''">
-				AND login_name = #{searchValue}
+				AND login_name like concat(concat('%', #{searchValue}), '%')
 			</if>
 		</where>
 	</select>

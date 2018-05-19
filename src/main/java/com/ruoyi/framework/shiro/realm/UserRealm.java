@@ -1,5 +1,6 @@
 package com.ruoyi.framework.shiro.realm;
 
+import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.AuthenticationException;
 import org.apache.shiro.authc.AuthenticationInfo;
 import org.apache.shiro.authc.AuthenticationToken;
@@ -16,6 +17,8 @@ import org.apache.shiro.subject.PrincipalCollection;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+
+import com.ruoyi.common.exception.user.CaptchaException;
 import com.ruoyi.common.exception.user.RoleBlockedException;
 import com.ruoyi.common.exception.user.UserBlockedException;
 import com.ruoyi.common.exception.user.UserNotExistsException;
@@ -35,10 +38,10 @@ import com.ruoyi.project.system.user.domain.User;
 public class UserRealm extends AuthorizingRealm
 {
     private static final Logger log = LoggerFactory.getLogger(UserRealm.class);
-    
+
     @Autowired
     private IMenuService menuService;
-    
+
     @Autowired
     private IRoleService roleService;
 
@@ -79,6 +82,10 @@ public class UserRealm extends AuthorizingRealm
         {
             user = loginService.login(username, password);
         }
+        catch (CaptchaException e)
+        {
+            throw new AuthenticationException(e.getMessage(), e);
+        }
         catch (UserNotExistsException e)
         {
             throw new UnknownAccountException(e.getMessage(), e);
@@ -106,6 +113,14 @@ public class UserRealm extends AuthorizingRealm
         }
         SimpleAuthenticationInfo info = new SimpleAuthenticationInfo(user, password, getName());
         return info;
+    }
+
+    /**
+     * 清理缓存权限
+     */
+    public void clearCachedAuthorizationInfo()
+    {
+        this.clearCachedAuthorizationInfo(SecurityUtils.getSubject().getPrincipals());
     }
 
 }

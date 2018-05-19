@@ -56,7 +56,7 @@ public class UserController extends BaseController
     @ResponseBody
     public TableDataInfo list(User user)
     {
-        setPageInfo(user);
+        startPage();
         List<User> list = userService.selectUserList(user);
         return getDataTable(list);
     }
@@ -112,7 +112,7 @@ public class UserController extends BaseController
         int rows = userService.resetUserPwd(user);
         if (rows > 0)
         {
-            return Message.ok();
+            return Message.success();
         }
         return Message.error();
     }
@@ -131,7 +131,7 @@ public class UserController extends BaseController
         }
         if (userService.deleteUserById(userId) > 0)
         {
-            return Message.ok();
+            return Message.success();
         }
         return Message.error();
     }
@@ -146,7 +146,7 @@ public class UserController extends BaseController
         int rows = userService.batchDeleteUser(ids);
         if (rows > 0)
         {
-            return Message.ok();
+            return Message.success();
         }
         return Message.error();
     }
@@ -163,7 +163,7 @@ public class UserController extends BaseController
     {
         if (userService.saveUser(user) > 0)
         {
-            return Message.ok();
+            return Message.success();
         }
         return Message.error();
     }
@@ -171,16 +171,46 @@ public class UserController extends BaseController
     /**
      * 校验用户名
      */
-    @PostMapping("/checkUserNameUnique")
+    @PostMapping("/checkLoginNameUnique")
     @ResponseBody
-    public String checkUserNameUnique(User user)
+    public String checkLoginNameUnique(User user)
     {
         String uniqueFlag = "0";
         if (user != null)
         {
-            uniqueFlag = userService.checkUserNameUnique(user.getLoginName());
+            uniqueFlag = userService.checkLoginNameUnique(user.getLoginName());
         }
         return uniqueFlag;
     }
 
+
+    /**
+     * 校验手机号码
+     */
+    @PostMapping("/checkPhoneUnique")
+    @ResponseBody
+    public String checkPhoneUnique(User user)
+    {
+        String uniqueFlag = "0";
+        if (user != null)
+        {
+            uniqueFlag = userService.checkPhoneUnique(user);
+        }
+        return uniqueFlag;
+    }
+
+    /**
+     * 校验手机号码
+     */
+    @PostMapping("/checkEmailUnique")
+    @ResponseBody
+    public String checkEmailUnique(User user)
+    {
+        String uniqueFlag = "0";
+        if (user != null)
+        {
+            uniqueFlag = userService.checkEmailUnique(user);
+        }
+        return uniqueFlag;
+    }
 }

@@ -2,7 +2,7 @@
 <!DOCTYPE mapper
 PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.ruoyi.project.system.post.dao.IPostDao">
+<mapper namespace="com.ruoyi.project.system.post.mapper.PostMapper">
 
 	<resultMap type="Post" id="PostResult">
 		<id     property="postId"        column="post_id"       />
@@ -21,7 +21,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		select post_id, post_code, post_name, post_sort, status, create_by, create_time, remark from sys_post
 		<where>
 			<if test="searchValue != null and searchValue != ''">
-				AND post_code = #{searchValue} OR post_name = #{searchValue}
+				AND post_code like concat(concat('%', #{searchValue}), '%') OR post_name like concat(concat('%', #{searchValue}), '%')
 			</if>
 		</where>
 	</select>

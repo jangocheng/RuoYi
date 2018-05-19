@@ -2,9 +2,10 @@ $("#form-user-add").validate({
 	rules:{
 		loginName:{
 			required:true,
-			minlength: 5,
+			minlength: 2,
+			maxlength: 20,
 			remote: {
-                url: ctx + "system/user/checkUserNameUnique",
+                url: ctx + "system/user/checkLoginNameUnique",
                 type: "post",
                 dataType: "json",
                 data: {
@@ -21,22 +22,60 @@ $("#form-user-add").validate({
 		userName:{
 			required:true,
 		},
+		deptName:{
+			required:true,
+		},
 		password:{
 			required:true,
-			minlength: 6
+			minlength: 5,
+			maxlength: 20
 		},
 		email:{
 			required:true,
-			email:true
+            email:true,
+            remote: {
+                url: ctx + "system/user/checkEmailUnique",
+                type: "post",
+                dataType: "json",
+                data: {
+                    name: function () {
+                        return $.trim($("#email").val());
+                    }
+                },
+                dataFilter: function (data, type) {
+                    if (data == "0") return true;
+                    else return false;
+                }
+            }
 		},
 		phonenumber:{
 			required:true,
+            remote: {
+                url: ctx + "system/user/checkPhoneUnique",
+                type: "post",
+                dataType: "json",
+                data: {
+                    name: function () {
+                        return $.trim($("#phonenumber").val());
+                    }
+                },
+                dataFilter: function (data, type) {
+                    if (data == "0") return true;
+                    else return false;
+                }
+            }
 		},
 	},
 	messages: {
         "loginName": {
             remote: "用户已经存在"
-        }
+        },
+		"email": {
+            remote: "Email已经存在"
+        },
+		"phonenumber":{
+        	remote: "手机号码已经存在"
+		}
     },
 	submitHandler:function(form){
 		add();

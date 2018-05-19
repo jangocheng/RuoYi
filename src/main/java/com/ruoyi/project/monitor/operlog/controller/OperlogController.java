@@ -11,7 +11,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
-import com.ruoyi.framework.aspectj.lang.annotation.Log;
 import com.ruoyi.framework.web.controller.BaseController;
 import com.ruoyi.framework.web.domain.Message;
 import com.ruoyi.framework.web.page.TableDataInfo;
@@ -44,13 +43,12 @@ public class OperlogController extends BaseController
     @ResponseBody
     public TableDataInfo list(OperLog operLog)
     {
-        setPageInfo(operLog);
+        startPage();
         List<OperLog> list = operLogService.selectOperLogList(operLog);
         return getDataTable(list);
     }
 
     @RequiresPermissions("monitor:operlog:batchRemove")
-    @Log(title = "监控管理", action = "操作日志-批量删除")
     @PostMapping("/batchRemove")
     @ResponseBody
     public Message batchRemove(@RequestParam("ids[]") Long[] ids)
@@ -58,7 +56,7 @@ public class OperlogController extends BaseController
         int rows = operLogService.batchDeleteOperLog(ids);
         if (rows > 0)
         {
-            return Message.ok();
+            return Message.success();
         }
         return Message.error();
     }

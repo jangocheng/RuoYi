@@ -10,15 +10,13 @@ import com.ruoyi.common.utils.StringUtils;
 public class PageDomain
 {
     /** 当前记录起始索引 */
-    private String pageNum;
+    private Integer pageNum;
     /** 每页显示记录数 */
-    private String pageSize;
+    private Integer pageSize;
     /** 排序列 */
     private String orderByColumn;
     /** 排序的方向 "desc" 或者 "asc". */
     private String isAsc;
-    /** 搜索值 */
-    private String searchValue;
 
     public String getOrderBy()
     {
@@ -29,22 +27,22 @@ public class PageDomain
         return orderByColumn + " " + isAsc;
     }
 
-    public String getPageNum()
+    public Integer getPageNum()
     {
         return pageNum;
     }
 
-    public void setPageNum(String pageNum)
+    public void setPageNum(Integer pageNum)
     {
         this.pageNum = pageNum;
     }
 
-    public String getPageSize()
+    public Integer getPageSize()
     {
         return pageSize;
     }
 
-    public void setPageSize(String pageSize)
+    public void setPageSize(Integer pageSize)
     {
         this.pageSize = pageSize;
     }
@@ -67,16 +65,6 @@ public class PageDomain
     public void setIsAsc(String isAsc)
     {
         this.isAsc = isAsc;
-    }
-
-    public String getSearchValue()
-    {
-        return searchValue;
-    }
-
-    public void setSearchValue(String searchValue)
-    {
-        this.searchValue = searchValue;
     }
 
 }
